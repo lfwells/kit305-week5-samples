@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //step 6, part 1
+    //step 6, part 2
     private val getCameraResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { result: Boolean  ->
         //step 7, part 1
         if (result)
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         getPermissionResult.launch(Manifest.permission.CAMERA)
     }
 
-    //step 6, part 2
+    //step 6, part 1
     private fun takeAPicture() {
 
             //try {
