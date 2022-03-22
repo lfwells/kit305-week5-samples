@@ -24,8 +24,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val REQUEST_IMAGE_CAPTURE = 1
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var ui : ActivityMainBinding
