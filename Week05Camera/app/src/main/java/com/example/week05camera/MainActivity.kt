@@ -1,6 +1,7 @@
 package com.example.week05camera
 
 import android.Manifest
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +14,8 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.example.week05camera.databinding.ActivityMainBinding
@@ -21,12 +24,30 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 const val REQUEST_IMAGE_CAPTURE = 1
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var ui : ActivityMainBinding
+
+    //step 5
+    private val getPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result : Boolean ->
+        if (result) {
+            // Permission is granted.
+            takeAPicture()
+        } else {
+            Toast.makeText(this, "Cannot access camera, permission denied", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    //step 6, part 1
+    private val getCameraResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { result: Boolean  ->
+        //step 7, part 1
+        if (result)
+        {
+            setPic(ui.myImageView)
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,30 +64,11 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun requestToTakeAPicture()
     {
-        requestPermissions(
-                arrayOf(Manifest.permission.CAMERA),
-                REQUEST_IMAGE_CAPTURE
-        )
+        getPermissionResult.launch(Manifest.permission.CAMERA)
     }
 
-    //step 5
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-       when(requestCode)
-        {
-            REQUEST_IMAGE_CAPTURE -> {
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // Permission is granted.
-                    takeAPicture()
-                } else {
-                    Toast.makeText(this, "Cannot access camera, permission denied", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-    }
-
-    //step 6
+    //step 6, part 2
     private fun takeAPicture() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
             //try {
                 val photoFile: File = createImageFile()!!
@@ -75,13 +77,12 @@ class MainActivity : AppCompatActivity() {
                         "com.example.week05camera",
                         photoFile
                 )
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                getCameraResult.launch(photoURI)
             //} catch (e: Exception) {}
 
     }
 
-    //step 6 part 2
+    //step 6, part 3
     lateinit var currentPhotoPath: String
 
     @Throws(IOException::class)
@@ -99,16 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //step 7
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-        {
-            setPic(ui.myImageView)
-        }
-    }
-
-    //step 7 pt2
+    //step 7, part 2
     private fun setPic(imageView: ImageView) {
         // Get the dimensions of the View
         val targetW: Int = imageView.measuredWidth
