@@ -8,13 +8,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.week05permissions.databinding.ActivityMainBinding
 
-const val REQUEST_CONTACT_LIST = 1
-
 class MainActivity : AppCompatActivity() {
     lateinit var ui : ActivityMainBinding
+
+    var getContactsPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+        if (result)
+        {
+            // Permission is granted.
+            readContacts()
+        } else {
+            // Explain to the user that the feature is unavailable because
+            // the features requires a permission that the user has denied.
+            Toast.makeText(this, "Cannot access contacts, permission denied", Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,31 +51,10 @@ class MainActivity : AppCompatActivity() {
                     }
                     else -> {
                         // You can directly ask for the permission.
-                        requestPermissions(
-                                arrayOf(Manifest.permission.READ_CONTACTS),
-                                REQUEST_CONTACT_LIST)
+                        getContactsPermission.launch(Manifest.permission.READ_CONTACTS)
                     }
                 }
             }
-        }
-    }
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_CONTACT_LIST -> {
-                // If request is cancelled, the result arrays are empty.
-                if ((grantResults.isNotEmpty() &&
-                                grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // Permission is granted.
-                    readContacts()
-                } else {
-                    // Explain to the user that the feature is unavailable because
-                    // the features requires a permission that the user has denied.
-                    Toast.makeText(this, "Cannot access contacts, permission denied", Toast.LENGTH_LONG).show()
-                }
-                return
-            }
-            // Add other 'when' lines to check for other permissions this app might request.
         }
     }
 
