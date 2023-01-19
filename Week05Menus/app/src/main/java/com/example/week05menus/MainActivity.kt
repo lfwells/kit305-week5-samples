@@ -36,5 +36,5 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    fun doSomething() : Boolean { return true }
+    private fun doSomething() : Boolean { return true }
 }

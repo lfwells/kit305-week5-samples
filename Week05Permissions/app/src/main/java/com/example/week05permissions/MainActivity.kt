@@ -1,9 +1,7 @@
 package com.example.week05permissions
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
-import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -13,9 +11,9 @@ import androidx.core.content.ContextCompat
 import com.example.week05permissions.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    lateinit var ui : ActivityMainBinding
+    private lateinit var ui : ActivityMainBinding
 
-    var getContactsPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+    private var getContactsPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
         if (result)
         {
             // Permission is granted.
