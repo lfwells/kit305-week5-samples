@@ -1,5 +1,6 @@
 package com.example.week05sharing
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,8 @@ import com.example.week05sharing.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var ui : ActivityMainBinding
+
+    @SuppressLint("SetTextI18n") //get rid of a warning about line 35
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui = ActivityMainBinding.inflate(layoutInflater)
@@ -14,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         //share out
         ui.btnSend.setOnClickListener {
-            var sendIntent = Intent().apply {
+            val sendIntent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, ui.txtToShare.text.toString())
                 type = "text/plain"
@@ -27,9 +30,9 @@ class MainActivity : AppCompatActivity() {
         {
             if (intent?.type == "text/plain")
             {
-                var sharedText = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
+                val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
                 //do something with sharedText
-                ui.lblSharedText.text = "Recieved: $sharedText"
+                ui.lblSharedText.text = "Received: $sharedText"
             }
         }
     }

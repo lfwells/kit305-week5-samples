@@ -1,20 +1,16 @@
 package com.example.week05tabs.ui.main
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import com.example.week05tabs.R
-import layout.GradesFragment
-import layout.StudentFragment
+import androidx.fragment.app.FragmentStatePagerAdapter
 
 private val TAB_TITLES = arrayOf(
     "Students",
     "Grades"
 )
 
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
-    : FragmentPagerAdapter(fm) {
+class SectionsPagerAdapter(fm: FragmentManager)
+    : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         // getItem is called to instantiate the fragment for the given page.
@@ -27,7 +23,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return TAB_TITLES[position]
     }
 
