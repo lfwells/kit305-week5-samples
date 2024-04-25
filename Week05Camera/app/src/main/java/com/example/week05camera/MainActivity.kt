@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 val photoFile: File = createImageFile()
                 val photoURI: Uri = FileProvider.getUriForFile(
                         this,
-                        "com.example.week05camera",
+                        "com.example.week05camera.provider",
                         photoFile
                 )
                 getCameraResult.launch(photoURI)

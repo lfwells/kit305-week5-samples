@@ -27,7 +27,7 @@
         <!-- step 2 -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.week05camera"
+            android:authorities="com.example.week05camera.provider"
             android:exported="false"
             android:grantUriPermissions="true">
 
